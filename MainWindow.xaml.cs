@@ -30,6 +30,63 @@ namespace Calculator_App
             InitializeComponent();
         }
 
+        // Clears the main window
+        private void btnClearMain_Click(object sender, RoutedEventArgs e)
+        {
+            ClearMain();
+        }
+
+        // Sets both values to a default of 0
+        private void btnClearAll_Click(object sender, RoutedEventArgs e)
+        {
+            mainValue = 0;
+            heldValue = 0;
+
+            UpdateBothValues();
+        }
+
+        private void PerformOperation(object sender, RoutedEventArgs e)
+        {
+            string symbol = ConvertContent(sender);
+            ConvertValuesToNumbers();
+
+            if (txtSymbol.Text == "" && symbol == "=")
+            {
+                return;
+            }
+
+            hasDecimal = false;
+
+            double sum = 0;
+            if (txtSymbol.Text == "")
+            {
+                txtSymbol.Text = symbol;
+                MainToHeld();
+                ClearMain();
+                return;
+            }
+
+            if (symbol == "=")
+            {
+                sum = MathOperation(txtSymbol.Text);
+
+                mainValue = sum;
+                heldValue = 0;
+                txtSymbol.Text = "";
+
+
+            }
+            else
+            {
+                sum = MathOperation(txtSymbol.Text);
+                AssignValueToHeld(sum);
+                txtSymbol.Text = symbol;
+            }
+
+            UpdateBothValues();
+
+        }
+
         private void AddValueToDisplay(object sender, RoutedEventArgs e)
         {
 
@@ -61,6 +118,7 @@ namespace Calculator_App
 
         } // AddValueToDisplay()
 
+        #region Math Operations
         public double Add(double number1, double number2)
         {
             return number1 + number2;
@@ -78,52 +136,13 @@ namespace Calculator_App
 
         public double Divide(double number1, double number2)
         {
-            return number2 / number1 ;
+            return number2 / number1;
         }
 
-        private void PerformOperation(object sender, RoutedEventArgs e)
-        {
-            string symbol = ConvertContent(sender);
-            ConvertValuesToNumbers();
-
-            if(txtSymbol.Text == "" && symbol == "=")
-            {
-                return;
-            }
-
-            hasDecimal = false;
-
-            double sum = 0;
-            if(txtSymbol.Text == "")
-            {
-                txtSymbol.Text = symbol;      
-                MainToHeld();
-                ClearMain();
-                return;
-            }
-
-            if(symbol == "=")
-            {
-                sum = MathOperation(txtSymbol.Text);
-
-                mainValue = sum;
-                heldValue = 0;
-                txtSymbol.Text = "";
-                
-                
-            }
-            else
-            {
-                sum = MathOperation(txtSymbol.Text);
-                AssignValueToHeld(sum);
-                txtSymbol.Text = symbol;
-            }
-
-           
-            
-            UpdateBothValues();
-            
-        }
+        // I've written this method to take care our doing individual calculations. Another part of my
+        // approach by breaking down every method to do a single thing. Here I just pass in the symbol
+        // that was clicked. I use a switch and my math methods I created to perform the calculation.
+        // Then I return the result.
 
         public double MathOperation(string symbol)
         {
@@ -146,7 +165,15 @@ namespace Calculator_App
             }
             return sum;
         }
+        #endregion MathOperations
 
+
+     
+
+
+        #region GUIControl
+
+        // Helper Method:  I use this in tandem with our events. I call this everytime i'm coverting a number from our button to a string we can work with.
         public string ConvertContent(object sender)
         {
             Button button = (Button)sender;
@@ -154,36 +181,25 @@ namespace Calculator_App
             return number;
         }
 
-        private void btnClearMain_Click(object sender, RoutedEventArgs e)
-        {
-            ClearMain();
-            
-        }
-
+        // Assigns a value to heldValue
+        // This is a helper method. Even though it's just one line, the name basically replaces needing
+        // to comment "assigning value to held" because our method name is descriptive
         public void AssignValueToHeld(double value)
         {
             heldValue = value;
         }
 
-
-
-        private void btnClearAll_Click(object sender, RoutedEventArgs e)
-        {
-            mainValue = 0;
-            heldValue = 0;
-
-            UpdateBothValues();
-        }
-
         public void MainValue()
         {
-            txtMain.Text = mainValue.ToString(); ;
+            txtMain.Text = mainValue.ToString();
         }
         public void HeldValue()
         {
             txtHeld.Text = heldValue.ToString();
         }
 
+        // Updates the values displayed in both the main and help text panels from their
+        // variable counter parts
         public void UpdateBothValues()
         {
             HeldValue();
@@ -191,21 +207,29 @@ namespace Calculator_App
 
         }
 
+        // Sets main value to 0 and updates the main window to the mainvalue
         public void ClearMain()
         {
             mainValue = 0;
             MainValue();
         }
 
+        // Swaps the value in main to the value in held
         public void MainToHeld()
         {
             txtHeld.Text = txtMain.Text;
         }
 
+        // Parses all numbers
         public void ConvertValuesToNumbers()
         {
             mainValue = double.Parse(txtMain.Text);
             heldValue = double.Parse(txtHeld.Text);
         }
+
+
+        #endregion GuiControl
+
+    
     }
 }

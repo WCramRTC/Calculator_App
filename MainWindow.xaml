@@ -45,5 +45,7 @@
         <Button Content="8" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center" Height="54" Width="98" Grid.Column="1" FontSize="20" FontFamily="Arial Rounded MT Bold" Click="AddValueToDisplay"/>
         <Button x:Name="btnClearAll" Content="Clear&#xD;&#xA;All" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Center" Height="54" Width="99" Grid.Column="2" FontSize="20" FontFamily="Arial Rounded MT Bold" Click="btnClearAll_Click"/>
         <Button x:Name="btnClearMain" Content="Clear&#xD;&#xA;Main" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Center" Height="54" Width="98" Grid.Column="1" FontSize="20" FontFamily="Arial Rounded MT Bold" Click="btnClearMain_Click"/>
+        <Button Content="Button" HorizontalAlignment="Left" Margin="37,27,0,0" Grid.Row="1" VerticalAlignment="Top" Click="Button_Click"/>
+
     </Grid>
 </Window>
